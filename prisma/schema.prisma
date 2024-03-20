@@ -54,6 +54,66 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Movie {
+  id          String  @id @default(uuid())
+  name        String
+  origin_name String?
+  slug String @unique
+  poster_url String
+  content     String?
+  type MovieType @default(single)
+  status MovieStatus @default(completed)
+  thumb_url String?
+  trailer_url String?
+  time String?
+  episode_current String?
+  episode_total String?
+  is_copyright Boolean @default(false)
+  chieurap Boolean @default(false)
+  sub_docquyen Boolean @default(false)
+  quality MovieQuality @default(HD)
+  lang MovieLang @default(vietsub)
+  notify String?
+  showtimes String?
+  year Int?
+  view Int @default(0)
+  actors String[]
+  directors String[]
+  category MovieCategory[]
+}
+
+model MovieCategory {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  movies Movie[]
+}
+
+enum MovieLang {
+  vietsub
+  english
+  thuyetminh
+  longtieng
+}
+
+enum MovieQuality {
+  SD
+  HD
+  FHD
+}
+
+enum MovieStatus {
+  ongoing
+  completed
+}
+
+enum MovieType {
+ single
+ series
+ tvshows
+ hoathinh
+}
+
 enum Role {
   administrator
   modarator
