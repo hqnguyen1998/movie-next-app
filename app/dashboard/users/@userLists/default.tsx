@@ -1,5 +1,6 @@
 import React from 'react';
-import type { User } from '@prisma/client';
+import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import {
   Table,
   TableBody,
@@ -9,15 +10,27 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MdDelete } from 'react-icons/md';
+import { Button } from '@/components/ui/button';
+import UserModal from '@/components/UserModal/UserModal';
 import { AiOutlineEdit } from 'react-icons/ai';
-import { Button } from '../ui/button';
+import Link from 'next/link';
 
-type Props = {
-  users: [User];
-};
+async function UserLists() {
+  const response = await fetch(`http://localhost:3000/api/user`, {
+    method: 'GET',
+    headers: headers(),
+    credentials: 'include',
+    next: {
+      revalidate: 60 * 60,
+    },
+  });
 
-function UserTableList({ users }: Props) {
-  let objKeys = Object.keys(users[0]);
+  if (!response.ok) {
+    return notFound();
+  }
+
+  const { users } = await response.json();
+  const keys = Object.keys(users[0]);
 
   return (
     <div className='h-fit whitespace-nowrap overflow-x-auto relative'>
@@ -27,26 +40,26 @@ function UserTableList({ users }: Props) {
             {users
               .map((user) => Object.keys(user))[0]
               .map((key) => (
-                <TableHead key={key} className='w-[100px]'>
-                  {key}
-                </TableHead>
+                <TableHead key={key}>{key}</TableHead>
               ))}
-            <TableHead className='w-[100px]'>Action</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {users.map((user) => (
+          {users?.map((user) => (
             <TableRow key={user.id} className='hover:bg-slate-800'>
-              {objKeys.map((key: string) => (
+              {keys.map((key: string) => (
                 <TableCell key={user[key]} className='font-medium'>
                   {user[key]}
                 </TableCell>
               ))}
               <TableCell className='flex gap-2'>
-                <Button size='icon'>
-                  <AiOutlineEdit />
-                </Button>
+                <Link href={`/dashboard/users/${user.id}`} scroll={false}>
+                  <Button size='icon'>
+                    <AiOutlineEdit />
+                  </Button>
+                </Link>
                 {user.role !== 'administrator' && (
                   <Button variant='destructive'>
                     <MdDelete />
@@ -61,4 +74,4 @@ function UserTableList({ users }: Props) {
   );
 }
 
-export default UserTableList;
+export default UserLists;

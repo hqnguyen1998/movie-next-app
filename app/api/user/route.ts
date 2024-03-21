@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth, prisma } from '@/lib/auth';
 import { hashPassword } from '@/lib/bcryptLib';
+import type { User } from '@prisma/client';
 
 // Private (Only Administrator)
 // GET api/user
@@ -14,16 +15,7 @@ export async function GET(req: Request) {
     );
   }
 
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      role: true,
-      createdAt: true,
-    },
-  });
+  const users = await prisma.user.findMany();
 
   return NextResponse.json({ users }, { status: 200 });
 }
