@@ -1,6 +1,8 @@
-import React from 'react';
-import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
+import React from "react";
+import Link from "next/link";
+import type { User } from "@prisma/client";
+import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import {
   Table,
   TableBody,
@@ -8,60 +10,62 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { MdDelete } from 'react-icons/md';
-import { Button } from '@/components/ui/button';
-import UserModal from '@/components/UserModal/UserModal';
-import { AiOutlineEdit } from 'react-icons/ai';
-import Link from 'next/link';
+} from "@/components/ui/table";
+import { MdDelete } from "react-icons/md";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { AiOutlineEdit } from "react-icons/ai";
 
 async function UserLists() {
   const response = await fetch(`http://localhost:3000/api/user`, {
-    method: 'GET',
+    method: "GET",
     headers: headers(),
-    credentials: 'include',
-    next: {
-      revalidate: 60 * 60,
-    },
+    credentials: "include",
+    cache: "no-cache",
   });
 
   if (!response.ok) {
     return notFound();
   }
 
-  const { users } = await response.json();
-  const keys = Object.keys(users[0]);
+  const { users }: { users: User[] } = await response.json();
 
   return (
-    <div className='h-fit whitespace-nowrap overflow-x-auto relative'>
-      <Table className='bg-slate-900 '>
+    <ScrollArea>
+      <Table className="bg-slate-900 whitespace-nowrap lg:whitespace-normal">
         <TableHeader>
-          <TableRow className='hover:bg-slate-800'>
-            {users
-              .map((user) => Object.keys(user))[0]
-              .map((key) => (
-                <TableHead key={key}>{key}</TableHead>
-              ))}
+          <TableRow className="hover:bg-slate-800">
+            <TableHead>ID</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Email Verified</TableHead>
+            <TableHead>Avatar</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Date Create</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {users?.map((user) => (
-            <TableRow key={user.id} className='hover:bg-slate-800'>
-              {keys.map((key: string) => (
-                <TableCell key={user[key]} className='font-medium'>
-                  {user[key]}
-                </TableCell>
-              ))}
-              <TableCell className='flex gap-2'>
+            <TableRow key={user.id} className="hover:bg-slate-800">
+              <TableCell>{user.id}</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>
+                {user.emailVerified ? "Đã xác thực" : "Chưa xác thực"}
+              </TableCell>
+              <TableCell>{user.image}</TableCell>
+              <TableCell>{user.role}</TableCell>
+              <TableCell>{user.createdAt.slice(0, 10)}</TableCell>
+              <TableCell className="flex gap-2">
                 <Link href={`/dashboard/users/${user.id}`} scroll={false}>
-                  <Button size='icon'>
+                  <Button size="icon">
                     <AiOutlineEdit />
                   </Button>
                 </Link>
-                {user.role !== 'administrator' && (
-                  <Button variant='destructive'>
+                {user.role !== "administrator" && (
+                  <Button variant="destructive">
                     <MdDelete />
                   </Button>
                 )}
@@ -70,7 +74,8 @@ async function UserLists() {
           ))}
         </TableBody>
       </Table>
-    </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 }
 

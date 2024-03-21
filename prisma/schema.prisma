@@ -55,7 +55,7 @@ model VerificationToken {
 }
 
 model Movie {
-  id          String  @id @default(uuid())
+  id          String  @id @default(cuid())
   name        String
   origin_name String?
   slug String @unique
