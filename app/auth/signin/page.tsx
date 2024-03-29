@@ -35,15 +35,16 @@ function SignInPage() {
       password: data.password,
       redirect: false,
     });
+    // console.log(response);
 
     if (response?.error) {
-      toast({
+      return toast({
         title: 'Đăng nhập thất bại!',
         variant: 'destructive',
       });
     }
 
-    router.push('/');
+    // router.push('/');
   };
 
   return (

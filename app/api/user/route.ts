@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { auth, prisma } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/bcryptLib';
-import type { User } from '@prisma/client';
+import { getServerSession } from 'next-auth/next';
 
 // Private (Only Administrator)
 // GET api/user
 // Get list of users
 export async function GET(req: Request) {
-  const session = await auth();
-  if (!session && session?.user.role !== 'administrator') {
+  const session = await getServerSession();
+  if (!session?.user || session?.user.role !== 'administrator') {
     return NextResponse.json(
       { msg: 'You are not an admin! get out ...' },
       { status: 401 }

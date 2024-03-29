@@ -1,19 +1,26 @@
-'use client';
 import React from 'react';
-import SideMenu from '@/components/SideMenu/SideMenu';
+import SideBar from './_components/side-bar';
+import Header from './_components/header';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Admin Panel',
+    template: '%s | AdminPanel',
+  },
+};
 
 type Props = {
   children: React.ReactNode;
-  header: React.ReactNode;
 };
 
-function DashboardLayout({ children, header }: Props) {
+function DashboardLayout({ children }: Props) {
   return (
-    <div className='flex flex-row bg-slate-950 text-white overflow-hidden'>
-      <SideMenu />
+    <div className='bg-[#f1f4f8] flex flex-row gap-2 text-black overflow-hidden'>
+      <SideBar />
 
       <div className='w-full h-full'>
-        {header}
+        <Header />
         {children}
       </div>
     </div>

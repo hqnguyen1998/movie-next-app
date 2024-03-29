@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function Loading() {
-  return <h1 className="text-white">Modal Loading...</h1>;
+  return <h1>User Fetching....</h1>;
 }
 
 export default Loading;

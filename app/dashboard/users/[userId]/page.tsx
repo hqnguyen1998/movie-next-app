@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import {
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 type Props = {
   params: {

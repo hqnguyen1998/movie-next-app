@@ -1,12 +1,20 @@
-import React from "react";
+import { Metadata } from 'next';
+import React from 'react';
 
 type Props = {
   children: React.ReactNode;
-  movieLists: React.ReactNode;
 };
 
-function MovieLayout({ children, movieLists }: Props) {
-  return <div className="p-5">{movieLists}</div>;
+export const metadata: Metadata = {
+  title: 'Movies',
+};
+
+function MovieLayout({ children }: Props) {
+  return (
+    <div className='p-5'>
+      <div>{children}</div>
+    </div>
+  );
 }
 
 export default MovieLayout;
