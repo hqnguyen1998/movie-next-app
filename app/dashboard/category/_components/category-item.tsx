@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { MovieCategory } from '@prisma/client';
 import { deleteCategory } from '@/lib/actions/deleteCategory';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -9,8 +8,9 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
+import { MovieCategory } from '@prisma/client';
 
-function CategoryItem({ categories }: { categories: [MovieCategory] }) {
+const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
   const { toast } = useToast();
 
   const onHandleDelete = async (id: string, name: string) => {
@@ -63,6 +63,6 @@ function CategoryItem({ categories }: { categories: [MovieCategory] }) {
       </TableCell>
     </TableRow>
   ));
-}
+};
 
 export default CategoryItem;

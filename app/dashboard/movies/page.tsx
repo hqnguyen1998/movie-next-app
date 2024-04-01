@@ -14,7 +14,7 @@ function MoviesPage() {
           <span className='text-red-500 cursor-pointer'>Làm mới</span>
         </RefreshButton>
       </div>
-      <Link href='/dashboard/new-movie' className='inline-block mb-5'>
+      <Link href='/dashboard/new-movie'>
         <Button variant='destructive'>+ Thêm movie</Button>
       </Link>
       <Suspense fallback={<Loading />}>

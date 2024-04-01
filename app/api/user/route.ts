@@ -8,12 +8,13 @@ import { getServerSession } from 'next-auth/next';
 // Get list of users
 export async function GET(req: Request) {
   const session = await getServerSession();
-  if (!session?.user || session?.user.role !== 'administrator') {
-    return NextResponse.json(
-      { msg: 'You are not an admin! get out ...' },
-      { status: 401 }
-    );
-  }
+  console.log(session);
+  // if (!session?.user || session?.user.role !== 'administrator') {
+  //   return NextResponse.json(
+  //     { msg: 'You are not an admin! get out ...' },
+  //     { status: 401 }
+  //   );
+  // }
 
   const users = await prisma.user.findMany();
 

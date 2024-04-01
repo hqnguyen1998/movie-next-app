@@ -2,6 +2,7 @@ import React from 'react';
 import SideBar from './_components/side-bar';
 import Header from './_components/header';
 import { Metadata } from 'next';
+import { MovieContextProvider } from '@/lib/context/MovieContext';
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +22,7 @@ function DashboardLayout({ children }: Props) {
 
       <div className='w-full h-full'>
         <Header />
-        {children}
+        <MovieContextProvider>{children}</MovieContextProvider>
       </div>
     </div>
   );

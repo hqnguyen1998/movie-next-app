@@ -9,13 +9,13 @@ export const updateMovie = async (formData: FormData) => {
     ...data,
     chieurap: data.chieurap === 'true' ? true : false,
     year: Number(data.year),
-    actors: data.actors.split(','),
-    directors: data.directors.split(','),
+    actors: data.actors.toString().split(','),
+    directors: data.directors.toString().split(','),
   };
 
   await prisma.movie.update({
     where: {
-      slug: data.slug,
+      slug: data.slug.toString(),
     },
     data: newData,
   });

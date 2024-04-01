@@ -1,6 +1,6 @@
-import NextAuth from 'next-auth';
+import NextAuth, { RequestInternal } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { comparePass } from '@/lib/bcryptLib';
 import { prisma } from '@/lib/prisma';
 
@@ -14,15 +14,18 @@ const handler = NextAuth({
         email: {},
         password: {},
       },
-      async authorize(credentials: { email: string; password: string }) {
+      async authorize(
+        credentials: Record<'email' | 'password', string> | undefined,
+        req: Pick<RequestInternal, 'query' | 'body' | 'headers' | 'method'>
+      ) {
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email,
+            email: credentials?.email,
           },
         });
 
         const checkPassword = await comparePass(
-          credentials.password,
+          credentials?.password || '',
           user?.password || ''
         );
 
@@ -35,13 +38,15 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user, token }) {
-      // console.log('Session Callbacks', session, user, token);
-      session.user = token.user;
+    async session({ session, token }) {
+      if (session.user !== undefined) {
+        session.user.id = token.user.id;
+      }
+      // console.log('Session Callbacks', session, token);
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      // console.log('JWT Callbacks', token, user, account);
+    async jwt({ token, user }) {
+      // console.log('JWT Callbacks', token.user);
       if (user) {
         token.user = user;
       }

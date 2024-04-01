@@ -25,14 +25,14 @@ export type MovieWithCategory = Prisma.MovieGetPayload<{
   };
 }>;
 
-function MovieTable({ movies }: { movies: [MovieWithCategory] }) {
+function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
   const onHandleDelete = (id: string) => {
     deleteMovieById(id);
   };
 
   return (
     <ScrollArea>
-      <Table className='bg-gray-100 rounded-md'>
+      <Table className='bg-white rounded-md'>
         <TableHeader>
           <TableRow>
             <TableHead className='text-black'>Thông tin</TableHead>
@@ -60,31 +60,42 @@ function MovieTable({ movies }: { movies: [MovieWithCategory] }) {
                   <p className='text-gray-500 text-xs'>
                     ({movie.origin_name}){' '}
                     <span className='text-red-700 font-medium tracking-wide'>
-                      {movie.episode_total && `[${movie.episode_total}]`}
+                      {movie.episode_current && `[${movie.episode_current}]`}
                     </span>
                   </p>
-                  {movie.type && (
+                  <div className='space-x-1'>
+                    {movie.type && (
+                      <Badge
+                        className={`${
+                          movie.type === 'single' &&
+                          'bg-gray-300 font-light text-black hover:bg-gray-300'
+                        } ${
+                          movie.type === 'series' &&
+                          'bg-indigo-500 font-light text-white hover:bg-indigo-500'
+                        } w-max tracking-wide`}
+                        variant='secondary'
+                      >
+                        {movie.type === 'single' && 'Phim lẻ'}
+                        {movie.type === 'series' && 'Phim bộ'}
+                        {movie.type === 'hoathinh' && 'Hoạt hình'}
+                        {movie.type === 'tvshows' && 'Tv shows'}
+                      </Badge>
+                    )}
                     <Badge
-                      className={`${
-                        movie.type === 'single' &&
-                        'bg-gray-300 font-light text-black hover:bg-gray-300'
-                      } ${
-                        movie.type === 'series' &&
-                        'bg-indigo-500 font-light text-white hover:bg-indigo-500'
-                      } w-max tracking-wide`}
-                      variant='secondary'
+                      variant={
+                        movie.status === 'completed' ? 'success' : 'info'
+                      }
                     >
-                      {movie.type === 'single' && 'Phim lẻ'}
-                      {movie.type === 'series' && 'Phim bộ'}
-                      {movie.type === 'hoathinh' && 'Hoạt hình'}
-                      {movie.type === 'tvshows' && 'Tv shows'}
+                      {movie.status === 'completed'
+                        ? 'Hoàn thành'
+                        : 'Đang chiếu'}
                     </Badge>
-                  )}
+                  </div>
                 </div>
               </TableCell>
               <TableCell>
                 <Image
-                  src={movie.thumb_url || ''}
+                  src={movie.poster_url || ''}
                   width={50}
                   height={50}
                   alt={movie.name}
@@ -99,7 +110,7 @@ function MovieTable({ movies }: { movies: [MovieWithCategory] }) {
                   </Badge>
                 ))}
               </TableCell>
-              <TableCell>{movie.createdAt.slice(0, 10)}</TableCell>
+              <TableCell>{movie.createdAt.toString().slice(0, 10)}</TableCell>
               <TableCell>{movie.view}</TableCell>
               <TableCell className='hidden lg:table-cell'>
                 <Link

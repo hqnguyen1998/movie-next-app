@@ -15,15 +15,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../../components/ui/select';
+} from '@/components/ui/select';
 
 export const dynamic = 'force-dynamic';
 
 async function CategoryList() {
-  const categories = await prisma.movieCategory.findMany({
-    take: 1,
-    skip: 2,
-  });
+  const categories = await prisma.movieCategory.findMany();
+
+  console.log(categories);
+
   return (
     <div>
       <ScrollArea>

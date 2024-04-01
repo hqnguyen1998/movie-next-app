@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { newMovie } from '@/lib/actions/createNewMovie';
 import MovieForm from '@/components/MovieForm/MovieForm';
