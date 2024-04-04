@@ -2,80 +2,89 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import MovieTable from './movie-table';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import { fetcher } from '@/lib/fetcher';
 import { Skeleton } from '@/components/ui/skeleton';
+import CustomPagination from '@/components/Pagination';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+export const dynamic = 'force-dynamic';
 
 function MovieLists() {
   const [page, setPage] = useState(1);
   const { data, isLoading } = useSWR(
-    `/api/movie?page=${page}&limit=1`,
+    `/api/movie?page=${page}&limit=10`,
     fetcher
   );
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  console.log(data);
-
-  const onHandlePrevious = () => {
-    setPage(page <= 1 ? 1 : page - 1);
-  };
-
-  const onHandleNext = () => {
-    setPage(page >= data.pagination.totalPages ? page : page + 1);
-  };
-
   return (
     <div className='flex flex-col space-y-5'>
-      <MovieTable movies={data.movies} />
+      <ScrollArea>
+        <Table className='bg-white rounded-md'>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='text-black'>Thông tin</TableHead>
+              <TableHead className='text-black'>Ảnh Thumb</TableHead>
+              <TableHead className='text-black hidden md:table-cell'>
+                Thể Loại
+              </TableHead>
+              <TableHead className='text-black'>Cập nhật lúc</TableHead>
+              <TableHead className='text-black'>Lượt xem</TableHead>
+              <TableHead className='text-black hidden lg:table-cell'>
+                Hành động
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem className='cursor-pointer'>
-            <PaginationPrevious onClick={onHandlePrevious} />
-          </PaginationItem>
-          {page > 1 && (
-            <PaginationItem onClick={() => setPage(page - 1)}>
-              <PaginationLink>{page - 1}</PaginationLink>
-            </PaginationItem>
-          )}
-          <PaginationItem>
-            <PaginationLink isActive>{page}</PaginationLink>
-          </PaginationItem>
-          {page < data.pagination.totalPages && (
-            <PaginationItem onClick={() => setPage(page + 1)}>
-              <PaginationLink>{page + 1}</PaginationLink>
-            </PaginationItem>
-          )}
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_value, i) => <Loading key={i} />)
+            ) : (
+              <MovieTable movies={data.movies} />
+            )}
+          </TableBody>
+        </Table>
+        <ScrollBar orientation='horizontal' />
+      </ScrollArea>
 
-          <PaginationItem className='cursor-pointer'>
-            <PaginationNext onClick={onHandleNext} />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <CustomPagination
+        page={page}
+        setPage={setPage}
+        totalPages={data?.pagination?.totalPages}
+      />
     </div>
   );
 }
 
 function Loading() {
   return (
-    <div>
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-    </div>
+    <TableRow>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[70px]' />
+      </TableCell>
+    </TableRow>
   );
 }
 

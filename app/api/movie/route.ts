@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
-  const page = Number(req.nextUrl.searchParams.get('page')) || 1;
+  const currenPage = Number(req.nextUrl.searchParams.get('page')) || 1;
   const itemPerPage = Number(req.nextUrl.searchParams.get('limit')) || 10;
-
-  console.log(page);
 
   try {
     const totalMovies = await prisma.movie.count();
@@ -14,7 +12,7 @@ export async function GET(req: NextRequest) {
         categories: true,
       },
       take: itemPerPage,
-      skip: page - itemPerPage,
+      skip: (currenPage - 1) * itemPerPage,
     });
 
     return NextResponse.json(
@@ -24,8 +22,8 @@ export async function GET(req: NextRequest) {
         pagination: {
           totalItems: totalMovies,
           totalItemsPerPage: itemPerPage,
-          currentPage: page,
-          totalPages: Math.round(totalMovies / itemPerPage),
+          currentPage: currenPage,
+          totalPages: Math.ceil(totalMovies / itemPerPage),
         },
         movies,
       },

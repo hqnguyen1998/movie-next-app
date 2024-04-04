@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-import { prisma } from '@/lib/prisma';
-import CategoryItem from './category-item';
+'use client';
+import React, { useState } from 'react';
+import useSWR from 'swr';
 import {
   Table,
   TableBody,
@@ -10,25 +10,23 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import CustomPagination from '@/components/Pagination';
+import { fetcher } from '@/lib/fetcher';
+import CategoryItem from './category-item';
 
 export const dynamic = 'force-dynamic';
 
-async function CategoryList() {
-  const categories = await prisma.movieCategory.findMany();
-
-  console.log(categories);
+function CategoryList() {
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useSWR(
+    `/api/category?page=${page}&limit=10`,
+    fetcher
+  );
 
   return (
-    <div>
-      <ScrollArea>
+    <React.Fragment>
+      <ScrollArea className='mb-5'>
         <Table className='bg-white rounded-md'>
           <TableHeader>
             <TableRow>
@@ -43,53 +41,38 @@ async function CategoryList() {
           </TableHeader>
 
           <TableBody>
-            <Suspense fallback={<Loading />}>
-              <CategoryItem categories={categories} />
-            </Suspense>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_value, i) => <Loading key={i} />)
+            ) : (
+              <CategoryItem categories={data.categories} />
+            )}
           </TableBody>
         </Table>
         <ScrollBar orientation='horizontal' />
       </ScrollArea>
 
-      <div className='flex flex-row justify-between mx-1 my-3'>
-        <Select>
-          <SelectTrigger className='w-[75px]'>
-            <SelectValue placeholder='Items' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='light'>10</SelectItem>
-            <SelectItem value='dark'>20</SelectItem>
-            <SelectItem value='system'>30</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className='flex flex-row gap-2'>
-          <div>{'<'}</div>
-          <div>1</div>
-          <div>{'>'}</div>
-        </div>
-      </div>
-    </div>
+      <CustomPagination
+        page={page}
+        setPage={setPage}
+        totalPages={data?.pagination?.totalPages}
+      />
+    </React.Fragment>
   );
 }
 
 function Loading() {
   return (
-    <div>
-      <TableRow>
-        <TableCell>
-          <Skeleton className='w-full h-[100px] mb-2' />
-        </TableCell>
-        <TableCell>
-          <Skeleton className='w-full h-[100px] mb-2' />
-        </TableCell>
-        <TableCell>
-          <Skeleton className='w-full h-[100px] mb-2' />
-        </TableCell>
-        <TableCell>
-          <Skeleton className='w-full h-[100px] mb-2' />
-        </TableCell>
-      </TableRow>
-    </div>
+    <TableRow>
+      <TableCell>
+        <Skeleton className='w-full h-[40px] mb-2' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[40px] mb-2' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='w-full h-[40px] mb-2' />
+      </TableCell>
+    </TableRow>
   );
 }
 
