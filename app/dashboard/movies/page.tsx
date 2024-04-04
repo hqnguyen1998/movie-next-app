@@ -1,9 +1,8 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import MovieLists from './_components/movie-lists';
 import RefreshButton from './_components/refresh-button';
-import { Skeleton } from '@/components/ui/skeleton';
 
 function MoviesPage() {
   return (
@@ -17,21 +16,7 @@ function MoviesPage() {
       <Link href='/dashboard/new-movie'>
         <Button variant='destructive'>+ Thêm movie</Button>
       </Link>
-      <Suspense fallback={<Loading />}>
-        <MovieLists />
-      </Suspense>
-    </div>
-  );
-}
-
-function Loading() {
-  return (
-    <div>
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
-      <Skeleton className='w-full h-[100px] mb-2' />
+      <MovieLists />
     </div>
   );
 }

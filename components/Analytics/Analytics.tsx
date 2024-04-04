@@ -1,10 +1,17 @@
 import React from 'react';
-import AnalyticCard from './AnalyticCard';
+import { unstable_noStore as noStore } from 'next/cache';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { FaFilm } from 'react-icons/fa6';
 import { FaCommentAlt, FaStar } from 'react-icons/fa';
+import AnalyticCard from './AnalyticCard';
 
-function Analytics() {
+type Props = {
+  totalMovies: number;
+};
+
+function Analytics({ totalMovies }: Props) {
+  noStore();
+
   return (
     <div className='w-full flex flex-col flex-wrap gap-5 p-5 md:flex-row'>
       <AnalyticCard
@@ -15,7 +22,7 @@ function Analytics() {
 
       <AnalyticCard
         title='Total Movies'
-        total={2313}
+        total={totalMovies}
         icon={<FaFilm className='w-7 h-7 text-red-400' />}
       />
 

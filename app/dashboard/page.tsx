@@ -1,11 +1,13 @@
-'use client';
 import React from 'react';
 import Analytics from '@/components/Analytics/Analytics';
+import { prisma } from '@/lib/prisma';
 
-function DashboardPage() {
+async function DashboardPage() {
+  const totalMovies = (await prisma.movie.findMany()).length;
+
   return (
     <div className='min-h-full'>
-      <Analytics />
+      <Analytics totalMovies={totalMovies} />
     </div>
   );
 }
