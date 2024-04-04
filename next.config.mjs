@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'img.phimapi.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.ophim1.com',
+      },
     ],
   },
 };

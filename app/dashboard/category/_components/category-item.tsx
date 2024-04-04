@@ -13,7 +13,7 @@ import { MovieCategory } from '@prisma/client';
 const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
   const { toast } = useToast();
 
-  const onHandleDelete = async (id: string, name: string) => {
+  const onHandleDelete = async (id: number, name: string) => {
     await deleteCategory(id);
 
     toast({

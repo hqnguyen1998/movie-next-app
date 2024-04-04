@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export async function GET() {
+  noStore();
+
   try {
     const movies = await prisma.movie.findMany({
       include: {
-        category: true,
+        categories: true,
       },
     });
 

@@ -1,10 +1,10 @@
+'use client';
 import React from 'react';
-import { Label } from '../ui/label';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useMovieContext } from '@/lib/context/context';
-import CategoryOptionLists from './CategoryOptionLists';
 
-function MovieExtraInfoTab() {
+function MovieExtraInfoTab({ children }: { children?: React.ReactNode }) {
   const { movie, setMovie } = useMovieContext();
 
   return (
@@ -15,15 +15,15 @@ function MovieExtraInfoTab() {
         </Label>
         <RadioGroup
           name='type'
-          defaultValue={movie.type || 'phim-le'}
+          defaultValue={movie.type}
           onValueChange={(value: string) => setMovie({ ...movie, type: value })}
         >
           <div className='space-x-1 flex items-center'>
-            <RadioGroupItem value='phim-le' id='phim-le' />
+            <RadioGroupItem value='single' id='phim-le' />
             <Label htmlFor='phim-le'>Phim Lẻ</Label>
           </div>
           <div className='space-x-1 flex items-center'>
-            <RadioGroupItem value='phim-bo' id='phim-bo' />
+            <RadioGroupItem value='series' id='phim-bo' />
             <Label htmlFor='phim-bo'>Phim Bộ</Label>
           </div>
         </RadioGroup>
@@ -54,9 +54,9 @@ function MovieExtraInfoTab() {
             <Label>Hoàn thành</Label>
           </div>
         </RadioGroup>
-
-        <CategoryOptionLists />
       </div>
+
+      {children}
     </div>
   );
 }

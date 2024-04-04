@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 function MoviesPage() {
   return (
-    <div>
+    <div className='space-y-3'>
       <div className='flex flex-row items-baseline mb-5'>
         <h1 className='text-3xl font-light mr-3'>Movies</h1>
         <RefreshButton>

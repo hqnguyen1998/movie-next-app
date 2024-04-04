@@ -21,12 +21,12 @@ import { FaTrash } from 'react-icons/fa';
 
 export type MovieWithCategory = Prisma.MovieGetPayload<{
   include: {
-    category: true;
+    categories: true;
   };
 }>;
 
 function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
-  const onHandleDelete = (id: string) => {
+  const onHandleDelete = (id: number) => {
     deleteMovieById(id);
   };
 
@@ -104,7 +104,7 @@ function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
                 />
               </TableCell>
               <TableCell className='hidden md:table-cell'>
-                {movie.category.map((cat) => (
+                {movie.categories.map((cat) => (
                   <Badge key={cat.id} variant='default' className='mr-1'>
                     {cat.name}
                   </Badge>

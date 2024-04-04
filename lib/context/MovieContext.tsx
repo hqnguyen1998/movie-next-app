@@ -1,7 +1,8 @@
 'use client';
+import { MovieCategory } from '@prisma/client';
 import { createContext, useState } from 'react';
 
-type movieContextType = {
+export type movieContextType = {
   movie: {
     name: string;
     origin_name: string;
@@ -18,6 +19,7 @@ type movieContextType = {
     year: string;
     type: string;
     status: string;
+    categories: [MovieCategory] | [];
   };
   setMovie: (movie: any) => void;
 };
@@ -37,8 +39,9 @@ export const movieContextDefaultValues: movieContextType = {
     lang: '',
     quality: '',
     year: '',
-    type: '',
-    status: '',
+    type: 'single',
+    status: 'completed',
+    categories: [],
   },
   setMovie: () => {},
 };

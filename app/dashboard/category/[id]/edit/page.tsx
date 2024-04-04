@@ -4,7 +4,7 @@ import CategoryForm from './_components/form';
 
 type Props = {
   params: {
-    id: string;
+    id: number;
   };
 };
 

@@ -7,7 +7,7 @@ async function MovieLists() {
   noStore();
   const movies = await prisma.movie.findMany({
     include: {
-      category: true,
+      categories: true,
     },
   });
 

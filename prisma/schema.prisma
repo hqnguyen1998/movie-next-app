@@ -55,53 +55,40 @@ model VerificationToken {
 }
 
 model Movie {
-  id              String          @id @default(cuid())
+  id              Int             @id @default(autoincrement())
   name            String
   origin_name     String
   slug            String          @unique
   poster_url      String
-  content         String
-  type            MovieType       @default(single)
-  status          MovieStatus     @default(completed)
   thumb_url       String
-  trailer_url     String
-  time            String
-  episode_current String
-  episode_total   String
-  is_copyright    Boolean         @default(false)
-  chieurap        Boolean         @default(false)
-  sub_docquyen    Boolean         @default(false)
-  quality         String
-  lang            String
-  notify          String
-  showtimes       String
-  year            Int
-  view            Int             @default(0)
+  content         String?
+  type            String?
+  status          String?
+  trailer_url     String?
+  time            String?
+  episode_current String?
+  episode_total   String?
+  is_copyright    Boolean?        @default(false)
+  chieurap        Boolean?        @default(false)
+  sub_docquyen    Boolean?        @default(false)
+  quality         String?
+  lang            String?
+  notify          String?
+  showtimes       String?
+  year            Int?
+  view            Int?            @default(0)
   actors          String[]
   directors       String[]
-  category        MovieCategory[]
+  categories      MovieCategory[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 }
 
 model MovieCategory {
-  id     String  @id @default(cuid())
+  id     Int     @id @default(autoincrement())
   name   String
   slug   String  @unique
   movies Movie[]
-}
-
-enum MovieStatus {
-  incoming
-  ongoing
-  completed
-}
-
-enum MovieType {
-  single
-  series
-  tvshows
-  hoathinh
 }
 
 enum Role {

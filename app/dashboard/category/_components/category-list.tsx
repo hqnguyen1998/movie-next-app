@@ -1,14 +1,15 @@
 import React, { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
+import CategoryItem from './category-item';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import CategoryItem from './category-item';
 import {
   Select,
   SelectContent,
@@ -16,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +43,7 @@ async function CategoryList() {
           </TableHeader>
 
           <TableBody>
-            <Suspense fallback={<h1>Loading...</h1>}>
+            <Suspense fallback={<Loading />}>
               <CategoryItem categories={categories} />
             </Suspense>
           </TableBody>
@@ -66,6 +68,27 @@ async function CategoryList() {
           <div>{'>'}</div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div>
+      <TableRow>
+        <TableCell>
+          <Skeleton className='w-full h-[100px] mb-2' />
+        </TableCell>
+        <TableCell>
+          <Skeleton className='w-full h-[100px] mb-2' />
+        </TableCell>
+        <TableCell>
+          <Skeleton className='w-full h-[100px] mb-2' />
+        </TableCell>
+        <TableCell>
+          <Skeleton className='w-full h-[100px] mb-2' />
+        </TableCell>
+      </TableRow>
     </div>
   );
 }
