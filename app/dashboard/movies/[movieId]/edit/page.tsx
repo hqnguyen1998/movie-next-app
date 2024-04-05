@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,11 +6,11 @@ import MovieInfoTab from '@/components/MovieForm/MovieInfoTab';
 import MovieExtraInfoTab from '@/components/MovieForm/MovieExtraInfoTab';
 import CategoryOptionLists from '@/components/MovieForm/CategoryOptionLists';
 import { Button } from '@/components/ui/button';
-import EditMovieForm from './_component/EditFormWrapper';
+import EditMovieForm from '../_component/EditFormWrapper';
 
 export const dynamic = 'force-dynamic';
 
-async function MovieProfilePage({
+async function EditMoviePage({
   params: { movieId },
 }: {
   params: { movieId: string };
@@ -61,4 +61,4 @@ async function MovieProfilePage({
   );
 }
 
-export default MovieProfilePage;
+export default EditMoviePage;

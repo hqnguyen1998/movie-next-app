@@ -2,10 +2,20 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-function RefreshButton({ children }: { children: React.ReactNode }) {
+function RefreshButton({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const router = useRouter();
 
-  return <div onClick={() => router.refresh()}>{children}</div>;
+  return (
+    <span className={className} onClick={() => router.refresh()}>
+      {children}
+    </span>
+  );
 }
 
 export default RefreshButton;

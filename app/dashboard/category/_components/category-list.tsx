@@ -1,6 +1,5 @@
 'use client';
-import React, { useState } from 'react';
-import useSWR from 'swr';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -11,19 +10,17 @@ import {
 } from '@/components/ui/table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import CustomPagination from '@/components/Pagination';
-import { fetcher } from '@/lib/fetcher';
 import CategoryItem from './category-item';
+import { MovieCategory } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
-function CategoryList() {
-  const [page, setPage] = useState(1);
-  const { data, isLoading } = useSWR(
-    `/api/category?page=${page}&limit=10`,
-    fetcher
-  );
+type Props = {
+  categories: [MovieCategory];
+  isLoading?: boolean;
+};
 
+function CategoryList({ categories, isLoading }: Props) {
   return (
     <React.Fragment>
       <ScrollArea className='mb-5'>
@@ -44,18 +41,12 @@ function CategoryList() {
             {isLoading ? (
               Array.from({ length: 5 }).map((_value, i) => <Loading key={i} />)
             ) : (
-              <CategoryItem categories={data.categories} />
+              <CategoryItem categories={categories} />
             )}
           </TableBody>
         </Table>
         <ScrollBar orientation='horizontal' />
       </ScrollArea>
-
-      <CustomPagination
-        page={page}
-        setPage={setPage}
-        totalPages={data?.pagination?.totalPages}
-      />
     </React.Fragment>
   );
 }

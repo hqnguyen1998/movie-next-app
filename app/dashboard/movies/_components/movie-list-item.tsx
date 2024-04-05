@@ -11,18 +11,16 @@ import { deleteMovieById } from '@/lib/actions/deleteMovie';
 import { MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
 
-export type MovieWithCategory = Prisma.MovieGetPayload<{
-  include: {
-    categories: true;
-  };
-}>;
+type Props = {
+  movie: Prisma.MovieGetPayload<{ include: { categories: true } }>;
+};
 
-function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
+function MovieListItem({ movie }: Props) {
   const onHandleDelete = (id: number) => {
     deleteMovieById(id);
   };
 
-  return movies.map((movie) => (
+  return (
     <TableRow key={movie.id} className='hover:bg-gray-200'>
       <TableCell className='flex flex-col gap-1 p-6 lg:flex-row lg:gap-5'>
         <div className='flex flex-col gap-2'>
@@ -81,8 +79,8 @@ function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
       <TableCell>{movie.view}</TableCell>
       <TableCell className='hidden lg:table-cell'>
         <Link
-          href='/dashboard/movies/[movieId]'
-          as={`/dashboard/movies/${movie.slug}`}
+          href='/dashboard/movies/[movieId]/edit'
+          as={`/dashboard/movies/${movie.slug}/edit`}
           scroll={false}
         >
           <Button
@@ -119,7 +117,7 @@ function MovieTable({ movies }: { movies: MovieWithCategory[] }) {
         </Dialog>
       </TableCell>
     </TableRow>
-  ));
+  );
 }
 
-export default MovieTable;
+export default MovieListItem;

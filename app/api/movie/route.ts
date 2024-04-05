@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getPagination } from '@/lib/paginationHelpers';
 
 export async function GET(req: NextRequest) {
-  const currenPage = Number(req.nextUrl.searchParams.get('page')) || 1;
+  const currentPage = Number(req.nextUrl.searchParams.get('page')) || 1;
   const itemPerPage = Number(req.nextUrl.searchParams.get('limit')) || 10;
 
   try {
@@ -12,19 +13,18 @@ export async function GET(req: NextRequest) {
         categories: true,
       },
       take: itemPerPage,
-      skip: (currenPage - 1) * itemPerPage,
+      skip: (currentPage - 1) * itemPerPage,
     });
 
     return NextResponse.json(
       {
         status: 'success',
         ok: true,
-        pagination: {
+        pagination: getPagination({
+          currentPage: currentPage,
           totalItems: totalMovies,
           totalItemsPerPage: itemPerPage,
-          currentPage: currenPage,
-          totalPages: Math.ceil(totalMovies / itemPerPage),
-        },
+        }),
         movies,
       },
       { status: 200 }

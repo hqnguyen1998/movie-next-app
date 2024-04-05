@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 function MovieLayout({ children }: Props) {
   return (
-    <div className='p-5'>
+    <main className='p-5'>
       <div>{children}</div>
-    </div>
+    </main>
   );
 }
 

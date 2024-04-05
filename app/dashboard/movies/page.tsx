@@ -1,22 +1,56 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 import { Button } from '@/components/ui/button';
-import MovieLists from './_components/movie-lists';
-import RefreshButton from './_components/refresh-button';
+import MovieLists from '@/dashboard/movies/_components/movie-lists';
+import RefreshButton from '@/dashboard/movies/_components/refresh-button';
+import PageHeader from '@/dashboard/_components/page-header';
+import CustomPagination from '@/components/Pagination';
+import { Skeleton } from '@/components/ui/skeleton';
+
+export const dynamic = 'force-dynamic';
 
 function MoviesPage() {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const { data, isLoading } = useSWR(
+    `/api/movie?page=${page}&limit=${limit}`,
+    fetcher
+  );
+
   return (
     <div className='space-y-3'>
-      <div className='flex flex-row items-baseline mb-5'>
-        <h1 className='text-3xl font-light mr-3'>Movies</h1>
+      <PageHeader
+        title='Movies'
+        description={
+          !isLoading ? (
+            `Hiển thị từ ${data?.pagination.from} đến ${data?.pagination.to} trong tổng số ${data?.pagination.totalItems} bản ghi.`
+          ) : (
+            <Skeleton className='w-[300px] h-[25px]' />
+          )
+        }
+      >
         <RefreshButton>
-          <span className='text-red-500 cursor-pointer'>Làm mới</span>
+          <span className='text-sm text-red-500 cursor-pointer hover:underline'>
+            Làm mới
+          </span>
         </RefreshButton>
-      </div>
+      </PageHeader>
       <Link href='/dashboard/new-movie'>
         <Button variant='destructive'>+ Thêm movie</Button>
       </Link>
-      <MovieLists />
+      <MovieLists movies={data?.movies} isLoading={isLoading} />
+      <section>
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          totalPages={data?.pagination?.totalPages}
+          itemPerPage={limit.toString()}
+          setItemPerPage={setLimit}
+        />
+      </section>
     </div>
   );
 }
