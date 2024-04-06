@@ -55,36 +55,46 @@ model VerificationToken {
 }
 
 model Movie {
-  id              Int             @id @default(autoincrement())
-  name            String
-  origin_name     String
-  slug            String          @unique
-  poster_url      String
-  thumb_url       String
-  content         String?
-  type            String?
-  status          String?
-  trailer_url     String?
-  time            String?
-  episode_current String?
-  episode_total   String?
-  is_copyright    Boolean?        @default(false)
-  chieurap        Boolean?        @default(false)
-  sub_docquyen    Boolean?        @default(false)
-  quality         String?
-  lang            String?
-  notify          String?
-  showtimes       String?
-  year            Int?
-  view            Int?            @default(0)
-  actors          String[]
-  directors       String[]
-  categories      MovieCategory[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id                   Int             @id @default(autoincrement())
+  name                 String
+  origin_name          String
+  slug                 String          @unique
+  poster_url           String
+  thumb_url            String
+  content              String?
+  type                 String?
+  status               String?
+  trailer_url          String?
+  time                 String?
+  episode_current      String?
+  episode_total        String?
+  chieurap             Boolean?        @default(false)
+  sub_docquyen         Boolean?        @default(false)
+  is_copyright         Boolean?        @default(false)
+  is_sensitive_content Boolean?        @default(false)
+  is_recommended       Boolean?        @default(false)
+  quality              String?
+  lang                 String?
+  notify               String?
+  showtimes            String?
+  year                 Int?
+  view                 Int?            @default(0)
+  actors               String[]
+  directors            String[]
+  categories           MovieCategory[]
+  countries            MovieCountry[]
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
 }
 
 model MovieCategory {
+  id     Int     @id @default(autoincrement())
+  name   String
+  slug   String  @unique
+  movies Movie[]
+}
+
+model MovieCountry {
   id     Int     @id @default(autoincrement())
   name   String
   slug   String  @unique
