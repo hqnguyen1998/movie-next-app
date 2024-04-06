@@ -8,20 +8,20 @@ import { Skeleton } from '@/components/ui/skeleton';
 import CustomPagination from '@/components/Pagination';
 import PageHeader from '@/dashboard/_components/page-header';
 import RefreshButton from '@/dashboard/movies/_components/refresh-button';
-import CategoryList from '@/dashboard/category/_components/category-list';
+import CountryOrCategoryList from '@/dashboard/(country_category)/_components/CountryOrCategoryList';
 
-function CategoryPage() {
+function CountryPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const { data, isLoading } = useSWR(
-    `/api/category?page=${page}&limit=${limit}`,
+    `/api/country?page=${page}&limit=${limit}`,
     fetcher
   );
 
   return (
     <main className='space-y-4 px-5'>
       <PageHeader
-        title='Categories'
+        title='Countries'
         description={
           !isLoading ? (
             `Hiển thị từ ${data?.pagination.from} đến ${data?.pagination.to} trong tổng số ${data?.pagination.totalItems} bản ghi.`
@@ -34,13 +34,13 @@ function CategoryPage() {
           Thiết lập lại
         </RefreshButton>
       </PageHeader>
-      <Link href='/dashboard/category/create'>
+      <Link href='/dashboard/country/create'>
         <Button variant='destructive' size='sm'>
-          + Thêm category
+          + Thêm country
         </Button>
       </Link>
 
-      <CategoryList categories={data?.categories} isLoading={isLoading} />
+      <CountryOrCategoryList datas={data?.countries} isLoading={isLoading} />
 
       <CustomPagination
         page={page}
@@ -53,4 +53,4 @@ function CategoryPage() {
   );
 }
 
-export default CategoryPage;
+export default CountryPage;

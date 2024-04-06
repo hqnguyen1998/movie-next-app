@@ -1,11 +1,17 @@
 'use client';
 import React from 'react';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useMovieContext } from '@/lib/context/context';
+import { Skeleton } from '@/components/ui/skeleton';
+import MovieCategorySelectionList from './MovieCategorySelectionList';
 
-function MovieExtraInfoTab({ children }: { children?: React.ReactNode }) {
+function MovieCategorizeTab() {
   const { movie, setMovie } = useMovieContext();
+
+  const { data, isLoading } = useSWR('/api/category', fetcher);
 
   return (
     <div className='space-y-5'>
@@ -56,9 +62,13 @@ function MovieExtraInfoTab({ children }: { children?: React.ReactNode }) {
         </RadioGroup>
       </div>
 
-      {children}
+      {isLoading ? (
+        <Skeleton className='w-full h-[100px]' />
+      ) : (
+        <MovieCategorySelectionList categories={data.categories} />
+      )}
     </div>
   );
 }
 
-export default MovieExtraInfoTab;
+export default MovieCategorizeTab;

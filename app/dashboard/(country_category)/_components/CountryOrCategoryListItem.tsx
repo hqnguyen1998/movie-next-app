@@ -7,9 +7,13 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
-import { MovieCategory } from '@prisma/client';
+import { MovieCategory, MovieCountry } from '@prisma/client';
 
-const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
+type Props = {
+  data: MovieCategory | MovieCountry;
+};
+
+const CountryOrCategoryListItem = ({ data }: Props) => {
   const { toast } = useToast();
 
   const onHandleDelete = async (id: number, name: string) => {
@@ -21,12 +25,12 @@ const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
     });
   };
 
-  return categories.map((category) => (
-    <TableRow key={category.id}>
-      <TableCell>{category.name}</TableCell>
-      <TableCell>{category.slug}</TableCell>
+  return (
+    <TableRow key={data.id}>
+      <TableCell>{data.name}</TableCell>
+      <TableCell>{data.slug}</TableCell>
       <TableCell>
-        <Link href={`/dashboard/category/${category.id}/edit`} scroll={false}>
+        <Link href={`/dashboard/category/${data.id}/edit`} scroll={false}>
           <Button
             size='icon'
             className='size-6 text-white mr-1 bg-green-500 hover:bg-green-600'
@@ -47,12 +51,12 @@ const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
             <div>
               <h1 className='mb-2'>
                 Bạn có chắc chắn muốn xoá?{' '}
-                <span className='text-red-700'>{category.name}</span>
+                <span className='text-red-700'>{data.name}</span>
               </h1>
 
               <Button
                 variant='destructive'
-                onClick={() => onHandleDelete(category.id, category.name)}
+                onClick={() => onHandleDelete(data.id, data.name)}
               >
                 Đồng ý
               </Button>
@@ -61,7 +65,7 @@ const CategoryItem = ({ categories }: { categories: MovieCategory[] }) => {
         </Dialog>
       </TableCell>
     </TableRow>
-  ));
+  );
 };
 
-export default CategoryItem;
+export default CountryOrCategoryListItem;

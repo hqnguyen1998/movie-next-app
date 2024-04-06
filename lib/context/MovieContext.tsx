@@ -26,8 +26,8 @@ export type movieContextType = {
     is_copyright?: boolean;
     is_sensitive_content?: boolean;
     is_recommended?: boolean;
-    categories?: [MovieCategory] | [];
-    countries?: [MovieCountry] | [];
+    categories: [MovieCategory] | [];
+    countries: [MovieCountry] | [];
   };
   setMovie: (movie: any) => void;
 };

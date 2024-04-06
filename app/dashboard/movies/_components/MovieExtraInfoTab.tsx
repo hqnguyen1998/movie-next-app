@@ -5,10 +5,10 @@ import { Label } from '@/components/ui/label';
 import { useMovieContext } from '@/lib/context/context';
 
 type Props = {
-  chieurap: boolean | null;
-  is_copyright: boolean | null;
-  is_recommended: boolean | null;
-  is_sensitive_content: boolean | null;
+  chieurap?: boolean | null;
+  is_copyright?: boolean | null;
+  is_recommended?: boolean | null;
+  is_sensitive_content?: boolean | null;
 };
 
 function MovieExtraInfoTab({

@@ -7,7 +7,7 @@ type Props = {
   title?: string;
   description?: string | React.ReactNode;
   children?: React.ReactNode;
-  isBack?: boolean;
+  isBack?: boolean | string;
 };
 
 function PageHeader({ title, description, children, isBack }: Props) {
@@ -22,7 +22,7 @@ function PageHeader({ title, description, children, isBack }: Props) {
           onClick={() => router.back()}
         >
           <MdOutlineKeyboardDoubleArrowLeft />
-          Quay lại
+          {typeof isBack === 'boolean' ? 'Quay lại' : isBack}
         </div>
       )}
 

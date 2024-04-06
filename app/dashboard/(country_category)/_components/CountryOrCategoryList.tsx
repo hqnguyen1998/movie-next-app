@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import {
   Table,
@@ -10,17 +9,17 @@ import {
 } from '@/components/ui/table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import CategoryItem from './category-item';
-import { MovieCategory } from '@prisma/client';
+import CountryOrCategoryListItem from './CountryOrCategoryListItem';
+import { MovieCategory, MovieCountry } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
 type Props = {
-  categories: [MovieCategory];
+  datas: [MovieCategory] | [MovieCountry];
   isLoading?: boolean;
 };
 
-function CategoryList({ categories, isLoading }: Props) {
+function CountryOrCategoryList({ datas, isLoading }: Props) {
   return (
     <React.Fragment>
       <ScrollArea className='mb-5'>
@@ -38,11 +37,13 @@ function CategoryList({ categories, isLoading }: Props) {
           </TableHeader>
 
           <TableBody>
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_value, i) => <Loading key={i} />)
-            ) : (
-              <CategoryItem categories={categories} />
-            )}
+            {isLoading
+              ? Array.from({ length: 5 }).map((_value, i) => (
+                  <Loading key={i} />
+                ))
+              : datas.map((data) => (
+                  <CountryOrCategoryListItem key={data.id} data={data} />
+                ))}
           </TableBody>
         </Table>
         <ScrollBar orientation='horizontal' />
@@ -67,4 +68,4 @@ function Loading() {
   );
 }
 
-export default CategoryList;
+export default CountryOrCategoryList;

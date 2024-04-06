@@ -2,14 +2,10 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MovieCategory } from '@prisma/client';
 import { useMovieContext } from '@/lib/context/context';
+import { MovieCategory } from '@prisma/client';
 
-type Props = {
-  category: MovieCategory;
-};
-
-function CategoryCheckBox({ category }: Props) {
+function MovieCategorySelectionItem({ category }: { category: MovieCategory }) {
   const { movie, setMovie } = useMovieContext();
 
   const onHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +13,7 @@ function CategoryCheckBox({ category }: Props) {
       ...movie,
       categories:
         movie.categories.filter((cat) => cat.slug === category.slug).length > 0
-          ? movie.categories.filter((cat) => cat.slug !== category.slug)
+          ? movie?.categories?.filter((cat) => cat.slug !== category.slug)
           : [...movie.categories, category],
     });
   };
@@ -42,4 +38,4 @@ function CategoryCheckBox({ category }: Props) {
   );
 }
 
-export default CategoryCheckBox;
+export default MovieCategorySelectionItem;

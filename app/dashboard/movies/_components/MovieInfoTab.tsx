@@ -2,8 +2,8 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { useMovieContext } from '@/lib/context/context';
 import { Textarea } from '@/components/ui/textarea';
+import { useMovieContext } from '@/lib/context/context';
 
 function MovieInfoTab() {
   const { movie: currentMovie, setMovie } = useMovieContext();

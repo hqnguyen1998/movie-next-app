@@ -80,7 +80,7 @@ function MovieListItem({ movie }: Props) {
       <TableCell className='hidden lg:table-cell'>
         <Link
           href='/dashboard/movies/[movieId]/edit'
-          as={`/dashboard/movies/${movie.id}/edit`}
+          as={`/dashboard/movies/${movie.slug}/edit`}
           scroll={false}
         >
           <Button

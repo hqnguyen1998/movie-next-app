@@ -1,78 +1,44 @@
-import React from 'react';
-import { prisma } from '@/lib/prisma';
-import { notFound } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import MovieInfoTab from '@/components/MovieForm/MovieInfoTab';
-import MovieExtraInfoTab from '@/components/MovieForm/MovieExtraInfoTab';
-import ExtraTab from '../_component/MovieExtraInfoTab';
-import CategoryOptionLists from '@/components/MovieForm/CategoryOptionLists';
-import EditMovieForm from '../_component/EditFormWrapper';
+'use client';
+import React, { FormEvent } from 'react';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+import { Skeleton } from '@/components/ui/skeleton';
+import MovieFormWrapper from '@/dashboard/movies/_components/MovieFormWrapper';
+import { useMovieContext } from '@/lib/context/context';
+import { updateMovie } from '@/lib/actions/updateMovie';
+import { toast } from '@/components/ui/use-toast';
 
 export const dynamic = 'force-dynamic';
 
-async function EditMoviePage({
+function EditMoviePage({
   params: { movieId },
 }: {
-  params: { movieId: number };
+  params: { movieId: string };
 }) {
-  const movie = await prisma.movie.findUnique({
-    where: {
-      id: Number(movieId),
-    },
-    include: {
-      categories: true,
-    },
-  });
+  const { movie } = useMovieContext();
+  const { isLoading, data } = useSWR(`/api/movie/${movieId}`, fetcher);
 
-  if (!movie) {
-    return notFound();
+  if (isLoading) {
+    return (
+      <div className='space-y-3'>
+        <div className='flex flex-row gap-3'>
+          <Skeleton className='w-[100px] h-[35px]' />
+          <Skeleton className='w-[100px] h-[35px]' />
+          <Skeleton className='w-[100px] h-[35px]' />
+        </div>
+        <Skeleton className='w-full h-[800px]' />
+      </div>
+    );
   }
 
-  return (
-    movie && (
-      <EditMovieForm currentMovie={movie}>
-        <Tabs defaultValue='#thong-tin-phim'>
-          <TabsList>
-            <TabsTrigger value='#thong-tin-phim'>Thông tin phim</TabsTrigger>
-            <TabsTrigger value='#phan-loai'>Phân loại</TabsTrigger>
-            <TabsTrigger value='#khac'>Khác</TabsTrigger>
-          </TabsList>
-          <TabsContent
-            value='#thong-tin-phim'
-            className='bg-white px-4 py-2 space-y-2'
-          >
-            <MovieInfoTab />
-          </TabsContent>
+  const onHandleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateMovie({ currentMovieId: data?.movie.id, movie: movie });
 
-          <TabsContent
-            value='#phan-loai'
-            className='bg-white px-4 py-2 space-y-2'
-          >
-            <MovieExtraInfoTab>
-              <CategoryOptionLists />
-            </MovieExtraInfoTab>
-          </TabsContent>
+    toast({ title: 'Cập nhật phim thành công!' });
+  };
 
-          <TabsContent
-            value='#khac'
-            className='bg-white px-4 py-2 space-y-5 flex flex-col'
-          >
-            <ExtraTab
-              is_copyright={movie.is_copyright}
-              chieurap={movie.chieurap}
-              is_recommended={movie.chieurap}
-              is_sensitive_content={movie.is_sensitive_content}
-            />
-          </TabsContent>
-
-          <Button type='submit' variant='success' className='mt-2'>
-            Lưu và Quay lại
-          </Button>
-        </Tabs>
-      </EditMovieForm>
-    )
-  );
+  return <MovieFormWrapper movie={data?.movie} action={onHandleSubmit} />;
 }
 
 export default EditMoviePage;
