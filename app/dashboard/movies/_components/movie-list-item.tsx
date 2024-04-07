@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { deleteMovieById } from '@/lib/actions/deleteMovie';
 import { MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
+import { AiOutlineLink } from 'react-icons/ai';
 
 type Props = {
   movie: Prisma.MovieGetPayload<{ include: { categories: true } }>;
@@ -78,6 +79,20 @@ function MovieListItem({ movie }: Props) {
       <TableCell>{movie.createdAt.toString().slice(0, 10)}</TableCell>
       <TableCell>{movie.view}</TableCell>
       <TableCell className='hidden lg:table-cell'>
+        <Link
+          href='/phim/[movieId]'
+          as={`/phim/${movie.slug}`}
+          scroll={false}
+          target='_blank'
+        >
+          <Button
+            size='icon'
+            className='size-6 text-white mr-1 bg-green-500 hover:bg-green-600'
+          >
+            <AiOutlineLink />
+          </Button>
+        </Link>
+
         <Link
           href='/dashboard/movies/[movieId]/edit'
           as={`/dashboard/movies/${movie.slug}/edit`}
