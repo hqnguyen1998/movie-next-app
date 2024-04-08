@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@/*": ["./*"],
       "@/dashboard/*": ["app/dashboard/*"],
       "@/components/*": ["components/*"],
       "@/lib/*": ["lib/*"]

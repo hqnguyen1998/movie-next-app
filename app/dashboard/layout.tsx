@@ -1,8 +1,9 @@
 import React from 'react';
+import { Metadata } from 'next';
 import SideBar from './_components/side-bar';
 import Header from './_components/header';
-import { Metadata } from 'next';
 import { MovieContextProvider } from '@/lib/context/MovieContext';
+import { SideMenuContextProvider } from '@/lib/context/SideMenuContext';
 
 export const metadata: Metadata = {
   title: {
@@ -17,14 +18,19 @@ type Props = {
 
 function DashboardLayout({ children }: Props) {
   return (
-    <div className='bg-[#f1f4f8] flex flex-row gap-2 text-black overflow-hidden'>
-      <SideBar />
-
-      <div className='w-full h-full'>
+    <main>
+      <SideMenuContextProvider>
         <Header />
-        <MovieContextProvider>{children}</MovieContextProvider>
-      </div>
-    </div>
+
+        <div className='flex flex-row'>
+          <SideBar />
+
+          <div className='flex-1'>
+            <MovieContextProvider>{children}</MovieContextProvider>
+          </div>
+        </div>
+      </SideMenuContextProvider>
+    </main>
   );
 }
 
