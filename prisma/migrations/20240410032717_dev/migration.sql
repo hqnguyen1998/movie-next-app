@@ -94,7 +94,8 @@ CREATE TABLE "MovieCatalog" (
     "seo_title" TEXT,
     "seo_description" TEXT,
     "seo_keyword" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable

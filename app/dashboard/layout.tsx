@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Metadata } from 'next';
 import SideBar from './_components/side-bar';
 import Header from './_components/header';

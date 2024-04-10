@@ -88,7 +88,7 @@ model Movie {
 }
 
 model MovieCatalog {
-  id              Int      @default(autoincrement())
+  id              Int       @default(autoincrement())
   name            String
   slug            String?
   per_page        Int?
@@ -96,7 +96,8 @@ model MovieCatalog {
   seo_title       String?
   seo_description String?
   seo_keyword     String?
-  created_at      DateTime @default(now())
+  created_at      DateTime? @default(now())
+  updated_at      DateTime? @updatedAt
 
   @@unique([id])
 }
