@@ -1,6 +1,5 @@
 'use server';
 import { prisma } from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
 
 export const deleteCategory = async (id: number) => {
   await prisma.movieCategory.delete({
@@ -8,6 +7,4 @@ export const deleteCategory = async (id: number) => {
       id: id,
     },
   });
-
-  revalidatePath('/dashboard/category');
 };

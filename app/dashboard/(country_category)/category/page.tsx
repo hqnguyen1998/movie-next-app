@@ -15,7 +15,10 @@ function CategoryPage() {
   const [limit, setLimit] = useState(10);
   const { data, isLoading } = useSWR(
     `/api/category?page=${page}&limit=${limit}`,
-    fetcher
+    fetcher,
+    {
+      keepPreviousData: true,
+    }
   );
 
   return (

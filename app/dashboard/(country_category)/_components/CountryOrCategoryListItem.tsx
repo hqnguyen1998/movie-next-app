@@ -1,26 +1,26 @@
+'use client';
 import React from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { deleteCategory } from '@/lib/actions/deleteCategory';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { MdEdit } from 'react-icons/md';
-import { FaTrash } from 'react-icons/fa';
+import { IoCreateOutline, IoEyeOutline } from 'react-icons/io5';
 import { MovieCategory, MovieCountry } from '@prisma/client';
+import DeleteDialog from '@/components/DeleteDialog/DeleteDialog';
 
 type Props = {
   data: MovieCategory | MovieCountry;
 };
 
 const CountryOrCategoryListItem = ({ data }: Props) => {
+  const router = useRouter();
   const { toast } = useToast();
 
-  const onHandleDelete = async (id: number, name: string) => {
-    await deleteCategory(id);
+  const onHandleDelete = async () => {
+    await deleteCategory(data.id);
 
     toast({
-      title: `Xoá thành công category: ${name}`,
+      title: `Xoá thành công category: ${data.name}`,
       variant: 'destructive',
     });
   };
@@ -29,40 +29,20 @@ const CountryOrCategoryListItem = ({ data }: Props) => {
     <TableRow key={data.id}>
       <TableCell>{data.name}</TableCell>
       <TableCell>{data.slug}</TableCell>
-      <TableCell>
-        <Link href={`/dashboard/category/${data.id}/edit`} scroll={false}>
-          <Button
-            size='icon'
-            className='size-6 text-white mr-1 bg-green-500 hover:bg-green-600'
-          >
-            <MdEdit />
-          </Button>
-        </Link>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              size='icon'
-              className='size-6 text-white bg-red-500 hover:bg-red-600'
-            >
-              <FaTrash />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <div>
-              <h1 className='mb-2'>
-                Bạn có chắc chắn muốn xoá?{' '}
-                <span className='text-red-700'>{data.name}</span>
-              </h1>
-
-              <Button
-                variant='destructive'
-                onClick={() => onHandleDelete(data.id, data.name)}
-              >
-                Đồng ý
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+      <TableCell className='text-indigo-600 flex flex-row gap-4 items-center'>
+        <div
+          onClick={() => router.push(`/dashboard/category/${data.id}/show`)}
+          className='flex flex-row gap-1 items-center cursor-pointer'
+        >
+          <IoEyeOutline /> <span>View</span>
+        </div>
+        <div
+          onClick={() => router.push(`/dashboard/category/${data.id}/edit`)}
+          className='flex flex-row gap-1 items-center cursor-pointer'
+        >
+          <IoCreateOutline /> <span>Sửa</span>
+        </div>
+        <DeleteDialog action={onHandleDelete} />
       </TableCell>
     </TableRow>
   );

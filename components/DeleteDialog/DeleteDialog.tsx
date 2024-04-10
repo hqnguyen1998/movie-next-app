@@ -14,7 +14,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { IoAlertCircleOutline } from 'react-icons/io5';
 
 type Props = {
-  action?: (e: React.MouseEvent<HTMLButtonElement>) => {};
+  action?: () => {};
 };
 
 function DeleteDialog({ action }: Props) {
@@ -39,9 +39,11 @@ function DeleteDialog({ action }: Props) {
               Huỷ bỏ
             </Button>
           </DialogClose>
-          <Button variant='destructive' onClick={action}>
-            Xoá
-          </Button>
+          <DialogClose asChild>
+            <Button variant='destructive' onClick={action}>
+              Xoá
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

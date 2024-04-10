@@ -1,4 +1,5 @@
 import React from 'react';
+import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import CategoryForm from './_components/form';
 
@@ -11,9 +12,12 @@ type Props = {
 async function EditCategoryPage({ params }: Props) {
   const category = await prisma.movieCategory.findUnique({
     where: {
-      id: params.id,
+      id: Number(params.id),
     },
   });
+
+  if (!category) return notFound();
+
   return <CategoryForm category={category} />;
 }
 

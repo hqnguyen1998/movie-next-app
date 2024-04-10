@@ -1,27 +1,18 @@
-'use client';
-import React, { ReactNode } from 'react';
-import { Button } from '@/components/ui/button';
-import { MdOutlineKeyboardDoubleArrowLeft } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
-import CategoryHeader from '../../_components/category-header';
+import React, { ReactNode, Suspense } from 'react';
+import PageHeader from '@/dashboard/_components/page-header';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function EditCategoryLayout({ children }: { children: ReactNode }) {
-  const router = useRouter();
   return (
     <div>
-      <CategoryHeader title='Categories'>
-        <p className='font-light'>Sửa category.</p>
-        <Button
-          onClick={() => router.back()}
-          variant='link'
-          size='default'
-          className='text-rose-500'
-        >
-          <MdOutlineKeyboardDoubleArrowLeft />
-          Quay lại danh sách categories
-        </Button>
-      </CategoryHeader>
-      {children}
+      <PageHeader
+        title='Categories'
+        description='Sửa category.'
+        isBack='Quay lại danh sách categories'
+      />
+      <Suspense fallback={<Skeleton className='w-full h-[500px]' />}>
+        {children}
+      </Suspense>
     </div>
   );
 }

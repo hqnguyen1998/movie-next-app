@@ -1,11 +1,12 @@
 'use client';
 import React, { useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { MdOutlineCancel } from 'react-icons/md';
 import { createCategory } from '@/lib/actions/createCategory';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { MdOutlineCancel } from 'react-icons/md';
+import { toast } from '@/components/ui/use-toast';
 
 function CreateCategoryPage() {
   const ref = useRef<HTMLFormElement>(null);
@@ -15,6 +16,10 @@ function CreateCategoryPage() {
     await createCategory(formData);
 
     ref?.current?.reset();
+    toast({
+      title: 'Bạn đã thêm thành công một thể loại mới.',
+      variant: 'success',
+    });
   };
 
   return (
